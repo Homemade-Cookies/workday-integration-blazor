@@ -1,4 +1,3 @@
-const jest = require('jest');
 const request = require('supertest');
 const app = require('../server');
 const mongoose = require('mongoose');
