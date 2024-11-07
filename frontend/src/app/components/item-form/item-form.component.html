@@ -1,0 +1,14 @@
+<div class="item-form">
+  <h2>{{ item._id ? 'Edit Item' : 'Add Item' }}</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" [(ngModel)]="item.name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" [(ngModel)]="item.description" name="description" required></textarea>
+    </div>
+    <button type="submit">{{ item._id ? 'Update' : 'Add' }}</button>
+  </form>
+</div>

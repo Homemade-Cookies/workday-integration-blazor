@@ -1,0 +1,43 @@
+@page "/item-list"
+
+@inject ItemService ItemService
+
+<PageTitle>Item List</PageTitle>
+
+<h3>Item List</h3>
+
+@if (items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!items.Any())
+{
+    <p>No items found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in items)
+        {
+            <li>
+                <strong>@item.Name</strong>: @item.Description
+                <button @onclick="() => DeleteItem(item.Id)">Delete</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Item> items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        items = await ItemService.GetItemsAsync();
+    }
+
+    private async Task DeleteItem(string id)
+    {
+        await ItemService.DeleteItemAsync(id);
+        items = await ItemService.GetItemsAsync();
+    }
+}
