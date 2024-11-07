@@ -86,3 +86,41 @@ This project is a basic CRUD (Create, Read, Update, Delete) application to manag
 
 1. Ensure data security and compliance with relevant regulations (e.g., GDPR, HIPAA).
 2. Implement encryption and secure data storage to protect sensitive information.
+
+## CI/CD Setup
+
+### GitHub Actions
+
+1. The CI/CD pipeline is configured using GitHub Actions. The workflow file is located at `backend/.github/workflows/ci-cd.yml`.
+2. The pipeline includes steps for setting up Node.js, MongoDB, running tests, building, and deploying the backend and frontend.
+
+### Docker
+
+1. The project includes Dockerfiles and docker-compose files for containerization.
+2. To build and run the containers, navigate to the `backend` or `frontend` directory and run:
+   ```bash
+   docker-compose up --build
+   ```
+
+## Running Tests
+
+### Backend Tests
+
+1. Unit tests for backend routes are located in `backend/tests/items.test.js`.
+2. To run the backend tests, navigate to the `backend` directory and run:
+   ```bash
+   npm test
+   ```
+
+### Frontend Tests
+
+1. Playwright tests for frontend components are located in `frontend/tests/playwright.spec.ts`.
+2. To run the frontend tests, navigate to the `frontend` directory and run:
+   ```bash
+   npm test
+   ```
+
+## Deployment
+
+1. The CI/CD pipeline includes steps for deploying the application to a server.
+2. Ensure the deployment commands are properly configured in the GitHub Actions workflow file.
