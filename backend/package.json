@@ -1,0 +1,34 @@
+{
+  "name": "workday-integration",
+  "version": "1.0.0",
+  "description": "A project for integrating with Workday",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js",
+    "build": "npm run build-backend && npm run build-frontend",
+    "build-backend": "cd backend && npm install && npm run build",
+    "build-frontend": "cd frontend && npm install && npm run build",
+    "lint": "eslint .",
+    "analyze": "npm run analyze-backend && npm run analyze-frontend",
+    "analyze-backend": "cd backend && npm run analyze",
+    "analyze-frontend": "cd frontend && npm run analyze",
+    "coverage": "npm run coverage-backend && npm run coverage-frontend",
+    "coverage-backend": "cd backend && npm run coverage",
+    "coverage-frontend": "cd frontend && npm run coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3",
+    "passport": "^0.4.1",
+    "connect-mongo": "^3.2.0",
+    "body-parser": "^1.19.0",
+    "supertest": "^6.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "jest": "^27.0.6"
+  }
+}
