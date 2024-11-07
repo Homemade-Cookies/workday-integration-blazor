@@ -73,4 +73,48 @@ describe('Items API', () => {
       });
     expect(res.statusCode).toEqual(400);
   });
+
+  it('should handle invalid input', async () => {
+    const res = await request(app)
+      .post('/api/items')
+      .send({
+        name: 'Invalid Item',
+        description: 12345, // Invalid description type
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+
+  it('should handle database errors', async () => {
+    jest.spyOn(Item.prototype, 'save').mockImplementationOnce(() => {
+      throw new Error('Database error');
+    });
+    const res = await request(app)
+      .post('/api/items')
+      .send({
+        name: 'Error Item',
+        description: 'This will cause a database error',
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+
+  it('should handle missing fields', async () => {
+    const res = await request(app)
+      .post('/api/items')
+      .send({
+        name: 'Missing Description',
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+
+  it('should handle invalid ID format', async () => {
+    const res = await request(app).get('/api/items/123');
+    expect(res.statusCode).toEqual(400);
+  });
+
+  it('should handle empty request body', async () => {
+    const res = await request(app)
+      .post('/api/items')
+      .send({});
+    expect(res.statusCode).toEqual(400);
+  });
 });
