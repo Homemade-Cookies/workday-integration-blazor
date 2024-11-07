@@ -117,4 +117,9 @@ describe('Items API', () => {
       .send({});
     expect(res.statusCode).toEqual(400);
   });
+
+  it('should check if the backend is running', async () => {
+    const res = await request(app).get('/api/items');
+    expect(res.statusCode).toEqual(200);
+  });
 });

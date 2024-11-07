@@ -4,7 +4,7 @@
   "description": "A project for integrating with Workday",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node server.js",
     "build": "npm run build-backend && npm run build-frontend",
     "build-backend": "cd backend && npm install && npm run build",
@@ -27,6 +27,7 @@
     "body-parser": "^1.19.0"
   },
   "devDependencies": {
-    "eslint": "^7.32.0"
+    "eslint": "^7.32.0",
+    "jest": "^27.0.6"
   }
 }
