@@ -1,2 +1,1 @@
-# workday-integration-blazor
-A repository for the Workday integration project using Blazor
+This repository is empty. Any task executed on it should be considered a new capability and needs to be created.
