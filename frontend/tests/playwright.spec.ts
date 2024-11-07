@@ -30,6 +30,33 @@ test.describe('Item Form', () => {
     const items = await page.$$('.item-list li');
     expect(items.length).toBe(0);
   });
+
+  test('should display validation errors', async ({ page }) => {
+    await page.fill('#name', '');
+    await page.fill('#description', '');
+    await page.click('button[type="submit"]');
+
+    const errorMessages = await page.$$('.validation-summary-errors li');
+    expect(errorMessages.length).toBeGreaterThan(0);
+  });
+
+  test('should handle invalid input', async ({ page }) => {
+    await page.fill('#name', 'Invalid Item');
+    await page.fill('#description', '12345'); // Invalid description type
+    await page.click('button[type="submit"]');
+
+    const errorMessages = await page.$$('.validation-summary-errors li');
+    expect(errorMessages.length).toBeGreaterThan(0);
+  });
+
+  test('should handle empty request body', async ({ page }) => {
+    await page.fill('#name', '');
+    await page.fill('#description', '');
+    await page.click('button[type="submit"]');
+
+    const errorMessages = await page.$$('.validation-summary-errors li');
+    expect(errorMessages.length).toBeGreaterThan(0);
+  });
 });
 
 test.describe('Item List', () => {
@@ -45,5 +72,14 @@ test.describe('Item List', () => {
   test('should display item details', async ({ page }) => {
     const itemName = await page.textContent('.item-list li:first-child strong');
     expect(itemName).toBeTruthy();
+  });
+
+  test('should handle database errors', async ({ page }) => {
+    // Simulate a database error
+    await page.route('**/api/items', route => route.abort('failed'));
+
+    await page.goto('http://localhost:4200');
+    const errorMessage = await page.textContent('.error-message');
+    expect(errorMessage).toBe('Failed to load items.');
   });
 });
