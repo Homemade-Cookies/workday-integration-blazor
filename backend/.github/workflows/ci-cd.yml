@@ -5,11 +5,9 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
 
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
 
     services:
@@ -27,7 +25,15 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies
+      - name: Cache backend dependencies
+        uses: actions/cache@v2
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-backend-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-backend-
+
+      - name: Install backend dependencies
         run: npm install
         working-directory: ./backend
 
@@ -38,6 +44,45 @@ jobs:
       - name: Build backend
         run: npm run build
         working-directory: ./backend
+
+      - name: Lint backend code
+        run: npm run lint
+        working-directory: ./backend
+
+      - name: Run static code analysis for backend
+        run: npm run analyze
+        working-directory: ./backend
+
+      - name: Generate backend code coverage report
+        run: npm run coverage
+        working-directory: ./backend
+
+      - name: Upload backend code coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: backend-coverage-report
+          path: backend/coverage
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    needs: build-backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Cache frontend dependencies
+        uses: actions/cache@v2
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-frontend-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-frontend-
 
       - name: Install frontend dependencies
         run: npm install
@@ -50,6 +95,32 @@ jobs:
       - name: Build frontend
         run: npm run build
         working-directory: ./frontend
+
+      - name: Lint frontend code
+        run: npm run lint
+        working-directory: ./frontend
+
+      - name: Run static code analysis for frontend
+        run: npm run analyze
+        working-directory: ./frontend
+
+      - name: Generate frontend code coverage report
+        run: npm run coverage
+        working-directory: ./frontend
+
+      - name: Upload frontend code coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: frontend-coverage-report
+          path: frontend/coverage
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Deploy to server
         run: |
